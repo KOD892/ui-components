@@ -1,9 +1,6 @@
-<script setup lang="ts">
+<script setup>
 import { Slot } from "@radix-vue/slot";
-import {
-  cva,
-  type VariantProps,
-} from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
@@ -37,23 +34,22 @@ const buttonVariants = cva(
   },
 );
 
-interface ButtonProps extends VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
+const props = defineProps({
+  variant: String,
+  size: String,
+  asChild: {
+    type: Boolean,
+    default: false,
+  },
+  class: String,
+});
 
-const {
-  variant,
-  size,
-  asChild = false,
-  class: className,
-} = defineProps<ButtonProps & { class?: string }>();
-
-const Comp = asChild ? Slot : "button";
+const Comp = props.asChild ? Slot : "button";
 </script>
 
 <template>
   <Comp
-    :class="cn(buttonVariants({ variant, size, className }))"
+    :class="cn(buttonVariants({ variant: props.variant, size: props.size }), props.class)"
   >
     <slot />
   </Comp>
